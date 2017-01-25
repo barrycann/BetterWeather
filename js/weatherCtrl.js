@@ -1,8 +1,19 @@
 angular.module('weatherApp')
 .controller('weatherCtrl', function($scope, weatherService){
+    
     $scope.getLocation = function(){
-        return weatherService.getLocation();
+        weatherService.getLocation().then(function(data){
+            $scope.loc = data;
+        });
     }
 
+    $scope.getWeather = function(){
+        weatherService.getWeather().then(function(wData){
+            $scope.weather = wData;
+        });
+    }
+
+
     $scope.getLocation();
+    $scope.getWeather();
 });
