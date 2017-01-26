@@ -2,7 +2,11 @@
 <p>This is the home page of the weather app.</p>
 <div>
     <h3>Your location is: {{loc.city}}, {{loc.region}}</h3>
+    <p>Latitude: {{lat}} Longitude: {{lon}}</p>
 </div>
 <div>
-    <p>The weather is {{weather.description}}</p>
+    <p>Current weather: {{weather.weather[0].description}}</p>
+</div>
+<div>
+    <hourly-dir></hourly-dir>
 </div>

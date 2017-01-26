@@ -8,6 +8,10 @@ angular.module('weatherApp', ['ui.router'])
         .state( 'fiveDay', {
             url: '/fiveDayForecast',
             templateUrl: '../views/fiveDayTmpl.html'
+        })
+        .state( 'data', {
+            url: '/data',
+            templateUrl: '../views/data.html'
         });
     
     $urlRouterProvider
