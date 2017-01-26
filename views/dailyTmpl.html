@@ -1,0 +1,21 @@
+<div class="main-card" ng-repeat="day in forecast">
+   <h1>{{day.dayOfWeek}}</h1>
+   <h4>{{day.date}}</h4>
+   <img src="" alt="">
+   <p class="high-temp">High: {{day.highTemp}}</p>
+   <p class="low-temp">Low: {{day.lowTemp}}</p></p>
+   <div>
+      <div class="little-card">
+         <h4>Precipitation</h4>
+         <h3>{{day.precip}}</h3>
+      </div>
+      <div class="little-card">
+         <h4>Wind</h4>
+         <h3>{{day.wind}}</h3>
+      </div>
+      <div class="little-card">
+         <h4>Humidity</h4>
+         <h3>{{day.humidity}}</h3>
+      </div>
+   </div>
+</div>

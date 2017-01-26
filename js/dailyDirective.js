@@ -1,8 +1,8 @@
 angular.module('weatherApp')
-.directive('hourlyDir', function(){
+.directive('dailyDir', function(){
    return {
       restrict: 'E',
-      templateUrl: './views/hourlyTmpl.html',
+      templateUrl: './views/dailyTmpl.html',
       controller: function($scope){
          
       }
