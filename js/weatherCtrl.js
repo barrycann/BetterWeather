@@ -5,7 +5,6 @@ angular.module('weatherApp')
         weatherService.getLocation()
         .then(function(data){
             $scope.loc = data;
-            console.log(data.city);
             $scope.getWeather(data.lat, data.lon);
             $scope.getForecast(data.city);
         });
@@ -15,7 +14,6 @@ angular.module('weatherApp')
         weatherService.getWeather(a, b)
         .then(function(data){
             $scope.weather = data;
-            console.log($scope.weather);
         });
     }
 
@@ -23,6 +21,10 @@ angular.module('weatherApp')
         weatherService.getForecast(city)
         .then(function(data){
             $scope.forecast = data;
+            $scope.highTempF = weatherService.toFahren(weatherService.getHighTemp(data));
+            $scope.highTempC = weatherService.toCelc(weatherService.getHighTemp(data));
+            console.log($scope.highTempF);
+            console.log($scope.highTempC)
             console.log($scope.forecast);
         });
     }

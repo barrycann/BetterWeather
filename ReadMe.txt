@@ -1,6 +1,5 @@
 No-Server Project Points:
 --------------------------------
-
 Directive with Template URL:   1  |  (2 points max for 2 directives)
 Additional View:	       1  |  (3 points max for 3 views)
 Minor Library:		       1  |  (3 points max for 3 libraries)
@@ -19,4 +18,9 @@ Project Description:
 ---------------------------------
 Name:    Better Weather
 Desc:    A beautiful weather app
+
+
+Jeremy's Patterns of Success for this Project:
+----------------------------------------------
+1) Focus on Minimum Viable Product (MVP) first
 

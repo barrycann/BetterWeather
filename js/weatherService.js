@@ -25,7 +25,8 @@ angular.module('weatherApp')
         var def = $q.defer();
         $http.get('http://api.openweathermap.org/data/2.5/forecast?q='+city+',us&appid=48a8f7e3f9111f2ae148e9d7d078c129')
         .then(function(resp){
-            def.resolve(resp);
+            var parsed = resp.data.list;
+            def.resolve(parsed);
         });
         return def.promise;
     }
@@ -38,6 +39,23 @@ angular.module('weatherApp')
         return Math.floor(tempK-273.15);
     }
 
+    this.getHighTemp = function(arr){
+        var highs = [];
+        for(var i=0;i<arr.length;i++){
+            if(arr[i].dt_txt.substring(0,10) === arr[0].dt_txt.substring(0,10)){
+                highs.push(arr[i].main.temp_max);
+            }
+        }
+        console.log(highs);
+        var max = (highs.reduce(function(a,b){return a+b;}, 0)) / highs.length;
 
+        return max;
+    }
+
+    // high-temp: arr[i].main.temp_max
+    // low-temp: arr[i].main.temp_min
+    // precipitation: arr[i].snow.3h or arr[i].rain.3h
+    // wind: arr[i].wind.speed;
+    // humidity: arr[i].main.humidity;
 
 });
