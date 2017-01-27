@@ -1,8 +1,6 @@
 angular.module('weatherApp')
 .service('weatherService', function($http, $q){
 
-    var five = {};
-
     this.getLocation = function(){
         var def = $q.defer();
         $http.get('http://ip-api.com/json')
@@ -28,59 +26,60 @@ angular.module('weatherApp')
         $http.get('http://api.openweathermap.org/data/2.5/forecast?q='+city+',us&appid=48a8f7e3f9111f2ae148e9d7d078c129')
         .then(function(resp){
             var parsed = resp.data.list;
-            five = buildFiveDay(parsed);
-            console.log(parsed)
-            console.log(five)
-            def.resolve(five);
+            console.log(parsed);
+            var date = buildDateArray(parsed);
+            console.log(date);
+            def.resolve(date);
         });
         return def.promise;
     }
 
-    this.toFahren = function(tempK){
-        return Math.floor(((tempK * 9/5) - 459.67));
+    function toFahren(tempK){
+        return Math.round(((tempK * 9/5) - 459.67));
     }
 
-    this.toCelc = function(tempK){
-        return Math.floor(tempK-273.15);
+    function toCelc(tempK){
+        return Math.round(tempK-273.15);
     }
 
-    this.getHighTemp = function(arr){
-        var highs = [];
-        for(var i=0;i<arr.length;i++){
-            if(arr[i].dt_txt.substring(0,10) === arr[0].dt_txt.substring(0,10)){
-                highs.push(arr[i].main.temp_max);
-            }
-        }
-        return Math.max(...highs);
-    }
-
-    buildFiveDay = function(arr){
+    function buildDateArray(arr){
         var fiveDay = [];
-        var day = {date: '', highs: [], lows: []};
+        var date = '';
+        var highs = [];
+        var lows = [];
+        var wind = [];
+        var humid = [];
+        var time = 0;
         
         for(var i=0;i<arr.length;i++){
-            var date = arr[i].dt_txt.substring(0, 10);
-            
-            if(i == 0 || date != arr[i-1].dt_txt.substring(0, 10)){
-                day.date = date
-            }      
-            day.highs.push(arr[i].main.temp_max);
-            day.lows.push(arr[i].main.temp_min);
-            //day.wind.push(arr[i].wind.speed);
-            //day.humidity.push(arr[i].main.humidity);
-            if(arr[i+1] === undefined || date != arr[i+1].dt_txt.substring(0,10)){
+            date = arr[i].dt_txt.substr(0, 10);
+            time = arr[i].dt_txt.substr(11, 2);
+            highs.push(arr[i].main.temp_max);
+            lows.push(arr[i].main.temp_min);
+            wind.push(arr[i].wind.speed);
+            humid.push(arr[i].main.humidity);
+            if(time == '21' || i == arr.length-1){
+                var day = new DailyInfo(date, moment(date).format('dddd'), 
+                Math.max(...highs), Math.min(...lows), Math.max(...wind), Math.max(...humid));
+                console.log(day);
                 fiveDay.push(day);
+                date = '';
+                highs = [];
+                lows = [];
+                wind = [];
+                humid = [];
             }
         }
         return fiveDay;
     }
 
-
-
-    // high-temp: arr[i].main.temp_max
-    // low-temp: arr[i].main.temp_min
-    // precipitation: arr[i].snow.3h or arr[i].rain.3h
-    // wind: arr[i].wind.speed;
-    // humidity: arr[i].main.humidity;
+    function DailyInfo(date, dayOfWeek, high, low, wind, humid){
+        this.date = date;
+        this.dayOfWeek = dayOfWeek;
+        this.high = high;
+        this.low = low;
+        this.wind = wind;
+        this.humid = humid;
+    }
 
 });

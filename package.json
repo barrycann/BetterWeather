@@ -1,0 +1,32 @@
+{
+  "name": "better-weather",
+  "version": "1.0.0",
+  "description": "No-Server Project Points:\r --------------------------------\r Directive with Template URL:   1  |  (2 points max for 2 directives)\r Additional View:\t       1  |  (3 points max for 3 views)\r Minor Library:\t\t       1  |  (3 points max for 3 libraries)\r Outside API:\t\t       2  |  (4 points max for 2 api's used)\r Custom CSS Animations:\t       2  |  (2 points max.  Keep animations to a MINIMUM)\r Fully Responsive CSS:\t       2  |  (2 points max)\r Hosted:\t\t        REQUIRED  |  \r Firebase:\t\t       2  |  (2 points max)\r Directive with Function:       2  |  (Unlimited points possible)\r CSS Pre-Processor:\t       3  |  (3 points max)\r Major Library (D3, jQUI, etc): 4  |  (Unlimited points possible)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/barrycann/BetterWeather.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+   "dependencies": {
+    "babel-preset-es2015": "^6.22.0",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-cachebust": "^0.0.6",
+    "gulp-concat": "^2.6.1",
+    "gulp-print": "^2.0.1",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^2.2.0",
+    "gulp-uglify": "^2.0.1"
+  },
+  "bugs": {
+    "url": "https://github.com/barrycann/BetterWeather/issues"
+  },
+  "homepage": "https://github.com/barrycann/BetterWeather#readme"
+}

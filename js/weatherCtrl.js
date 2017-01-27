@@ -23,10 +23,6 @@ angular.module('weatherApp')
         weatherService.getForecast(city)
         .then(function(data){
             $scope.forecast = data;
-            //$scope.highTempF = weatherService.toFahren(weatherService.getHighTemp(data));
-            //$scope.highTempC = weatherService.toCelc(weatherService.getHighTemp(data));
-            //console.log($scope.highTempF);
-            //console.log($scope.highTempC)
             console.log($scope.forecast);
         });
     }
