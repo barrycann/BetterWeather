@@ -1,6 +1,6 @@
 angular.module('weatherApp')
 .service('weatherService', function($http, $q){
-
+    
     this.getLocation = function(){
         var def = $q.defer();
         $http.get('http://ip-api.com/json')
@@ -15,7 +15,14 @@ angular.module('weatherApp')
         var def = $q.defer();
         $http.get('http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&appid=48a8f7e3f9111f2ae148e9d7d078c129')
         .then(function(resp){
-            var weather = resp.data;
+            var desc = resp.data.weather[0].description;
+            var weather = {
+                desc: desc,
+                currentTemp: toFahren(resp.data.main.temp),
+                wind: windToMph(resp.data.wind.speed),
+                humid: resp.data.main.humidity,
+                image: getImage(desc)
+            }
             def.resolve(weather);
         });
         return def.promise;
@@ -26,60 +33,131 @@ angular.module('weatherApp')
         $http.get('http://api.openweathermap.org/data/2.5/forecast?q='+city+',us&appid=48a8f7e3f9111f2ae148e9d7d078c129')
         .then(function(resp){
             var parsed = resp.data.list;
-            console.log(parsed);
             var date = buildDateArray(parsed);
-            console.log(date);
             def.resolve(date);
         });
         return def.promise;
     }
 
     function toFahren(tempK){
-        return Math.round(((tempK * 9/5) - 459.67));
+        return Math.round(((tempK * 1.8) - 459));
     }
 
-    function toCelc(tempK){
-        return Math.round(tempK-273.15);
+    // Converts speed in meters/second to miles/hour
+    function windToMph(speed){
+        return Math.round((speed * 2.23694) * 10) / 10;
     }
 
+    // Takes info from weather forecast object and puts it into an array of daily forecast objects
     function buildDateArray(arr){
         var fiveDay = [];
         var date = '';
-        var highs = [];
-        var lows = [];
+        var image = '';
+        var temps = [];
         var wind = [];
         var humid = [];
+        var desc = [];
         var time = 0;
         
         for(var i=0;i<arr.length;i++){
             date = arr[i].dt_txt.substr(0, 10);
             time = arr[i].dt_txt.substr(11, 2);
-            highs.push(arr[i].main.temp_max);
-            lows.push(arr[i].main.temp_min);
+            temps.push(toFahren(arr[i].main.temp));
             wind.push(arr[i].wind.speed);
             humid.push(arr[i].main.humidity);
+            desc.push(arr[i].weather[0].description);
             if(time == '21' || i == arr.length-1){
-                var day = new DailyInfo(date, moment(date).format('dddd'), 
-                Math.max(...highs), Math.min(...lows), Math.max(...wind), Math.max(...humid));
-                console.log(day);
+                var windAvg = windToMph((wind.reduce(function(a,b){ return a+b;}))/wind.length);
+                var humidAvg = (humid.reduce(function(a,b){return a+b;})/humid.length);
+                var dailyDesc = findWeather(desc);
+                console.log(desc);
+                var day = new DailyInfo(
+                    moment(date).format('MMM D'),
+                    moment(date).format('ddd'), 
+                    Math.max(...temps),
+                    Math.min(...temps),
+                    windAvg,
+                    Math.round(humidAvg),
+                    getImage(dailyDesc)
+                );
+                
                 fiveDay.push(day);
+                
                 date = '';
-                highs = [];
-                lows = [];
+                temps = [];
                 wind = [];
                 humid = [];
+                desc = [];
             }
         }
+
+        // Checks to see if today's info got into the five day, and removes today (which would be a six day forecast)
+        // if(fiveDay.length > 5){
+        //     trimmed = fiveDay.splice(1);
+        //     return trimmed;
+        // }
         return fiveDay;
     }
 
-    function DailyInfo(date, dayOfWeek, high, low, wind, humid){
+    // Daily forecast info constructor
+    function DailyInfo(date, dayOfWeek, high, low, wind, humid, desc){
         this.date = date;
         this.dayOfWeek = dayOfWeek;
         this.high = high;
         this.low = low;
         this.wind = wind;
         this.humid = humid;
+        this.desc = desc;
     }
 
+    function findWeather(arr){
+        var clearCount = 0;
+        var cloudCount = 0;
+        for(var i=0;i<arr.length;i++){
+            if(arr[i] == 'light rain' || arr[i] == 'rain'){
+                return 'rain';
+            }
+            if(arr[i] == 'clear sky'){
+                clearCount ++;
+            }
+            if(arr[i] == 'broken clouds'){
+                cloudCount++;
+            }
+        }
+        if(clearCount > (arr.length / 2)){
+            return 'clear sky';
+        }
+        if(cloudCount >= 2){
+            return 'broken clouds';
+        }
+        return arr[arr.length-1];
+    }
+
+    function getImage(desc){
+        var theImage = '';
+        switch(desc) {
+            case 'clear sky':
+                theImage = './img/clearSky.jpg';
+                break;
+            case 'few clouds':
+            case 'scattered clouds':
+                theImage = './img/PartlyCloudy.jpg';
+                break;
+            case 'broken clouds':
+                theImage = './img/cloudy.jpg';
+                break;
+            case 'rain':
+            case 'shower rain':
+            case 'thunderstorm':
+                theImage = './img/Rain.jpg';
+                break;
+            case 'snow':
+            case 'mist':
+                theImage = './img/heavySnow.jpg';
+                break;
+            default:
+                theImage='./img/PartlyCloudy.jpg';
+        }
+        return theImage;
+    }
 });

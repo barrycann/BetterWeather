@@ -1,7 +1,5 @@
 angular.module('weatherApp')
 .controller('weatherCtrl', function($scope, weatherService){
-    
-    $scope.tenDay = {};
 
     $scope.getLocation = function(){
         weatherService.getLocation()
@@ -16,6 +14,10 @@ angular.module('weatherApp')
         weatherService.getWeather(a, b)
         .then(function(data){
             $scope.weather = data;
+            $scope.image = $scope.weather.image;
+            $scope.currentTemp = $scope.weather.currentTemp;
+            $scope.wind = $scope.weather.wind;
+            $scope.humidity = $scope.weather.humid;
         });
     }
 

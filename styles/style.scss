@@ -1,0 +1,227 @@
+@import "reset.scss";
+
+//Font family variables
+$display-sans: 'Nunito';
+$typical-sans: 'Open Sans';
+$typical-serif: 'Lora';
+$display: 'Nunito';
+
+
+$dark-grey: #2b2b2b;
+$darker-grey: #1d1d1d;
+$light-grey: #eee;
+$light-pink-orange: #ffc89f;
+$deep-midnight-blue: #0f2f48;
+$dark-grey-pink: #9f6482;
+$dark-grey-blue: #64829f;
+$vivid-salmon: #ff8a83;
+$light-warm-grey: #C3C9B2;
+
+body {
+   font-family: $typical-sans, sans-serif;
+   background-color: $darker-grey;
+}
+
+h1 {
+   font-size: 54px;
+   font-family: $display-sans, sans-serif;
+   color: #ddd;
+}
+
+h3 {
+   padding: 10px 0 5px 0;
+   font-size: 24px;
+   font-family: $display-sans, sans-serif;
+   color: $dark-grey-pink;
+   text-transform: uppercase;
+}
+
+h4 {
+   font-size: 14px;
+   font-family: $typical-sans, sans-serif;
+   color: $deep-midnight-blue;
+}
+
+p {
+   padding: 10px;
+   color: #999;
+   font-family: 'Open Sans', sans-serif;
+}
+
+.main {
+   padding: 40px 0 0 0;
+   margin: 0 3%;
+}
+
+nav {
+   margin: 0 3%;
+   width: 94%;
+   height: 60px;
+   position: relative;
+}
+
+.nav-holder {
+   position: relative;
+   width: 100%;
+   background-color: $dark-grey;
+}
+
+.nav-left {
+   width: 30%;
+   height: 60px;
+   padding: 0 10px;
+   position: absolute;
+   left: 0;
+   top: 0;
+}
+
+.nav-right {
+   width: 60%;
+   height: 60px;
+   padding: 0 10px;
+   position: absolute;
+   right: 0;
+   top: 0;
+}
+
+.nav-centered-left {
+   position: absolute;
+   left: 0;
+   top: 50%;
+   transform: translate(0, -50%);
+   font-size: 24px;
+   font-weight: 600;
+   color: $vivid-salmon;
+}
+
+.nav-centered-right {
+   position: absolute;
+   right: 0;
+   top: 50%;
+   transform: translate(0, -50%);
+   font-size: 18px;
+}
+
+nav ul li{
+   padding-left: 50px;
+   display: inline-block;
+   list-style: none;
+}
+
+a:link, a:visited, a:active {
+   text-decoration: none;
+   color: $light-pink-orange;
+}
+
+a:hover {
+   color: $light-grey;
+}
+
+.daily-card {
+   display: inline-block;
+   margin: 0 1%;
+   background-color: #eaeaea;
+   width: calc(90%/5);
+   text-align: center;
+}
+
+.welcome-card {
+   padding: 20px 40px;
+   color: #ccc;
+   text-align: center;
+
+   p {
+      width: 100%;
+      text-align: center;
+   }
+
+   .little-desc {
+      color: $light-pink-orange;
+      text-transform: uppercase;
+   }
+}
+
+.weather-card {
+   position: relative;
+   width: 75%;
+   margin: 0 auto;
+}
+
+.main-weather-image {
+   width: 80%;
+   margin: 0 10%;
+}
+
+.location-input-box {
+   width: 100%;
+   margin: 20px 0;
+
+}
+
+.daily-image {
+   width: 80%;
+   margin: 7px auto;
+}
+
+.big-nums {
+   font-size: 65px;
+   color: white;
+}
+
+.subtext {
+   font-size: 18px;
+   vertical-align: top;
+}
+
+.main-weather-info {
+   position: absolute;
+   top: 0;
+   width: 100%;
+}
+
+.sub-card{
+   width: 30%;
+   text-align: center;
+   display: inline-block;
+}
+
+.footer {
+   position: absolute;
+   bottom: 0;
+   height: 40px;
+   width: 100%;
+   background-color: $dark-grey;
+   font-size: 14px;
+   text-align: center;
+}
+
+.info-header {
+   font-size: 20px;
+   font-family: $display-sans, sans-serif;
+   color: $dark-grey-pink;
+   text-transform: uppercase;
+}
+
+.fiveday-temps {
+   display: inline-block;
+   text-align: center;
+   text-transform: uppercase;
+}
+
+.num-high {
+   padding: 0 0 10px 0;
+   font-size: 24px;
+   font-weight: 600;
+   color: $dark-grey-pink;
+}
+
+.num-low {
+   padding: 0 0 10px 0;
+   font-size: 24px;
+   font-weight: 600;
+   color: $dark-grey-blue;
+}
+
+.sub-info {
+   color: $dark-grey-blue;
+}

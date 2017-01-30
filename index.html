@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html ng-app="weatherApp">
     <head>
-        <title>Better Weather</title>
+        <title>Weather App</title>
+        <link rel="icon" type="image/png" href="./img/favicon.png">
         <link rel="stylesheet" href="./dist/styles.css">
+        <link href="https://fonts.googleapis.com/css?family=Nunito|Alegreya|Open+Sans|Lora" rel="stylesheet">
     </head>
     <body ng-controller="weatherCtrl">
-            <div class="menu">
-                <ul>
-                    <li><a ui-sref="home">Home</a></li>
-                    <li><a ui-sref="fiveDay">Five Day</a></li>
-                    <li><a ui-sref="data">Data</a></li>
-                </ul>
-            </div>
+        <nav-dir></nav-dir>
+        <div class="main">
             <div class="view-container">
                 <div ui-view></div>
             </div>
+        </div>
+        <footer-dir></footer-dir>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
         <script src="https://momentjs.com/downloads/moment.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.4.2/angular-ui-router.min.js"></script>
