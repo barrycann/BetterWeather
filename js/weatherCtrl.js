@@ -25,7 +25,11 @@ angular.module('weatherApp')
         weatherService.getForecast(city)
         .then(function(data){
             $scope.forecast = data;
-            console.log($scope.forecast);
+            if(data.length == 4){
+                $scope.forecastLength = 'Four';
+            } else {
+                $scope.forecastLength = 'Five';
+            }
         });
     }
 

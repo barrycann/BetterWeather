@@ -13,12 +13,12 @@ angular.module('weatherApp')
 
     this.getWeather = function(lat, lon){
         var def = $q.defer();
-        $http.get('http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&appid=48a8f7e3f9111f2ae148e9d7d078c129')
+        $http.get('http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&units=imperial&appid=48a8f7e3f9111f2ae148e9d7d078c129')
         .then(function(resp){
             var desc = resp.data.weather[0].description;
             var weather = {
                 desc: desc,
-                currentTemp: toFahren(resp.data.main.temp),
+                currentTemp: Math.round(resp.data.main.temp),
                 wind: windToMph(resp.data.wind.speed),
                 humid: resp.data.main.humidity,
                 image: getImage(desc)
@@ -30,7 +30,7 @@ angular.module('weatherApp')
 
     this.getForecast = function(city){
         var def = $q.defer();
-        $http.get('http://api.openweathermap.org/data/2.5/forecast?q='+city+',us&appid=48a8f7e3f9111f2ae148e9d7d078c129')
+        $http.get('http://api.openweathermap.org/data/2.5/forecast?q='+city+',us&units=imperial&appid=48a8f7e3f9111f2ae148e9d7d078c129')
         .then(function(resp){
             var parsed = resp.data.list;
             var date = buildDateArray(parsed);
@@ -62,7 +62,7 @@ angular.module('weatherApp')
         for(var i=0;i<arr.length;i++){
             date = arr[i].dt_txt.substr(0, 10);
             time = arr[i].dt_txt.substr(11, 2);
-            temps.push(toFahren(arr[i].main.temp));
+            temps.push(arr[i].main.temp);
             wind.push(arr[i].wind.speed);
             humid.push(arr[i].main.humidity);
             desc.push(arr[i].weather[0].description);
@@ -70,12 +70,11 @@ angular.module('weatherApp')
                 var windAvg = windToMph((wind.reduce(function(a,b){ return a+b;}))/wind.length);
                 var humidAvg = (humid.reduce(function(a,b){return a+b;})/humid.length);
                 var dailyDesc = findWeather(desc);
-                console.log(desc);
                 var day = new DailyInfo(
                     moment(date).format('MMM D'),
                     moment(date).format('ddd'), 
-                    Math.max(...temps),
-                    Math.min(...temps),
+                    Math.round(Math.max(...temps)),
+                    Math.round(Math.min(...temps)),
                     windAvg,
                     Math.round(humidAvg),
                     getImage(dailyDesc)
@@ -92,10 +91,10 @@ angular.module('weatherApp')
         }
 
         // Checks to see if today's info got into the five day, and removes today (which would be a six day forecast)
-        // if(fiveDay.length > 5){
-        //     trimmed = fiveDay.splice(1);
-        //     return trimmed;
-        // }
+        if(fiveDay.length > 5){
+            var trimmed = fiveDay.splice(1);
+            return trimmed;
+        }
         return fiveDay;
     }
 
@@ -111,23 +110,40 @@ angular.module('weatherApp')
     }
 
     function findWeather(arr){
-        var clearCount = 0;
-        var cloudCount = 0;
+        var cloudPoints = 0;
+        var cloudValue = 0;
+        var strictWeather = ['rain', 'light rain', 'shower rain', 'thunderstorm', 'snow'];
+
         for(var i=0;i<arr.length;i++){
-            if(arr[i] == 'light rain' || arr[i] == 'rain'){
-                return 'rain';
+            for(var j=0;j<strictWeather.length;j++){
+                if(arr[i] == strictWeather[j]){
+                    return strictWeather[j];
+                }
             }
-            if(arr[i] == 'clear sky'){
-                clearCount ++;
+            switch(arr[i]){
+                case 'few clouds':
+                    cloudPoints += 1;
+                    break;
+                case 'scattered clouds':
+                    cloudPoints += 2;
+                    break;
+                case 'broken clouds':
+                    cloudPoints += 3;
+                    break;
+                default:
+                    break;
             }
-            if(arr[i] == 'broken clouds'){
-                cloudCount++;
-            }
-        }
-        if(clearCount > (arr.length / 2)){
+        } // End For
+
+        cloudValue = cloudPoints / arr.length;
+        console.log(arr);
+        console.log("points", cloudPoints);
+        console.log("Value", cloudValue);
+        if(cloudValue <= 0.75){
             return 'clear sky';
-        }
-        if(cloudCount >= 2){
+        } else if( cloudValue <= 2){
+            return 'few clouds';
+        } else {
             return 'broken clouds';
         }
         return arr[arr.length-1];
